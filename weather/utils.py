@@ -33,7 +33,7 @@ cities = [
   {"city": "New York", "country": "United States"}
 ]
 
-API_KEY = "57b9b292765040189f153014253001"
+API_KEY = os.getenv('API_KEY')
 BASE_URL = "http://api.weatherapi.com/v1/current.json"
 
 def get_weather_for_city(city_name, country_name):
