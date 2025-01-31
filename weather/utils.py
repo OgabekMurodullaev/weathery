@@ -7,7 +7,6 @@ application = get_wsgi_application()
 import requests
 from weather.models import Weather
 
-
 cities = [
   {"city": "Tashkent", "country": "Uzbekistan"},
   {"city": "Samarkand", "country": "Uzbekistan"},
@@ -45,7 +44,6 @@ def get_weather_for_city(city_name, country_name):
 
     response = requests.get(BASE_URL, params=params)
     data = response.json()
-    print(data)
 
     if 'current' in data:
         weather_data = data['current']
@@ -61,11 +59,14 @@ def get_weather_for_city(city_name, country_name):
     else:
         return None
 
-
 def update_weather():
     for city in cities:
         weather_data = get_weather_for_city(city['city'], city['country'])
         if weather_data:
-            Weather.objects.update_or_create(**weather_data)
+            Weather.objects.update_or_create(
+                city_name=weather_data['city_name'],  # Yangi yoki mavjud shahar bo'yicha tekshiriladi
+                country_name=weather_data['country_name'],
+                defaults=weather_data  # Yangi ma'lumotlarni yangilash uchun
+            )
 
 update_weather()
